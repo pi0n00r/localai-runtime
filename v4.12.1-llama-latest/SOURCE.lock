@@ -13,8 +13,8 @@
   },
   "localai_source_patch": {
     "path": "localai-v4.12.1-llama.patch",
-    "sha256": "6c15cf0ba16a13320ab5943a2fd7bfa7880646cdaf0793459a8f37345045c763",
-    "purpose": "Pin the maintained llama.cpp source and adapt the text-only rerank call to the current signature"
+    "sha256": "3a0bffeaa943f014b46751f6d356dda1d60331e63268f7a2080c3038eef1b67a",
+    "purpose": "Pin the maintained llama.cpp source, adapt text-only rerank, and include split realtime definitions in the gRPC target"
   },
   "compatibility_patch": {
     "path": "0001-add-server-task-type-score-rebased.patch",

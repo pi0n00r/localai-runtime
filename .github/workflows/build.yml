@@ -44,6 +44,8 @@ jobs:
           git -C "$RUNNER_TEMP/LocalAI" fetch --depth 1 origin "$LOCALAI_COMMIT"
           git -C "$RUNNER_TEMP/LocalAI" checkout --detach FETCH_HEAD
           test "$(git -C "$RUNNER_TEMP/LocalAI" rev-parse HEAD)" = "$LOCALAI_COMMIT"
+          test "$(sha256sum "$GITHUB_WORKSPACE/v4.12.1-llama-latest/localai-v4.12.1-llama.patch" | cut -d " " -f 1)" = \
+            "3a0bffeaa943f014b46751f6d356dda1d60331e63268f7a2080c3038eef1b67a"
           git -C "$RUNNER_TEMP/LocalAI" apply \
             "$GITHUB_WORKSPACE/v4.12.1-llama-latest/localai-v4.12.1-llama.patch"
           grep -F "LLAMA_VERSION?=$LLAMA_COMMIT" \

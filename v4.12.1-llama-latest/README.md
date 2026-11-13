@@ -25,6 +25,10 @@ current multimodal signature by passing explicit empty query/document media
 collections. It does not add media to the gRPC contract or change rerank request
 semantics.
 
+It also includes llama.cpp's split realtime implementation in LocalAI's guarded
+single-translation-unit gRPC build, matching the existing handling for the
+upstream chat, schema, stream, and decision modules.
+
 Published tags:
 
 - `ghcr.io/pi0n00r/localai:v4.12.1-llama-72500667f`

@@ -12,10 +12,23 @@ index 3bce117..58ec5c7 100644
  CMAKE_ARGS?=
  BUILD_TYPE?=
 diff --git a/backend/cpp/llama-cpp/grpc-server.cpp b/backend/cpp/llama-cpp/grpc-server.cpp
-index 21e556b..f0b77bb 100644
+index 21e556b..4af5b21 100644
 --- a/backend/cpp/llama-cpp/grpc-server.cpp
 +++ b/backend/cpp/llama-cpp/grpc-server.cpp
-@@ -3114,7 +3114,7 @@ public:
+@@ -43,6 +43,12 @@
+ #if __has_include("server-stream.cpp")
+ #include "server-stream.cpp"
+ #endif
++// server-context.cpp owns realtime slots but current llama.cpp keeps their
++// implementation in a separate translation unit. The LocalAI gRPC backend
++// builds as one translation unit, so include those definitions when present.
++#if __has_include("server-realtime.cpp")
++#include "server-realtime.cpp"
++#endif
+ #if __has_include("server-decision.cpp")
+ #define LOCALAI_HAS_NATIVE_DECISIONS 1
+ #include "server-decision.cpp"
+@@ -3114,7 +3120,7 @@ public:
  
              tasks.reserve(documents.size());
              for (size_t i = 0; i < documents.size(); i++) {
