@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 180
     env:
       LOCALAI_COMMIT: ec9274027eadd552d56f2c6c1fe86cd9216a991a
-      LLAMA_COMMIT: 72500667f88c6b7ed2e6ebbc308d8759a0a5afea
+      LLAMA_COMMIT: df43671c1f341deb88306bb1e8c857151b123f84
       BACKEND_REPOSITORY: ghcr.io/pi0n00r/localai-llama-backend
       RUNTIME_REPOSITORY: ghcr.io/pi0n00r/localai
       LOCALAI_RUNTIME: docker.io/localai/localai@sha256:ac48a6f50d9a7557df457c4abd886c0fd2eec74cc53265ecfce226393b6445f4
@@ -50,7 +50,7 @@ jobs:
           git -C "$RUNNER_TEMP/LocalAI" checkout --detach FETCH_HEAD
           test "$(git -C "$RUNNER_TEMP/LocalAI" rev-parse HEAD)" = "$LOCALAI_COMMIT"
           test "$(sha256sum "$GITHUB_WORKSPACE/v4.12.1-llama-latest/localai-v4.12.1-llama.patch" | cut -d " " -f 1)" = \
-            "3a0bffeaa943f014b46751f6d356dda1d60331e63268f7a2080c3038eef1b67a"
+            "be862d918dc34f92d88577ec8d9364061a5c176d16be96a2fcc22d1082ba4e05"
           git -C "$RUNNER_TEMP/LocalAI" apply \
             "$GITHUB_WORKSPACE/v4.12.1-llama-latest/localai-v4.12.1-llama.patch"
           grep -F "LLAMA_VERSION?=$LLAMA_COMMIT" \
@@ -95,7 +95,7 @@ jobs:
             BUILDER_BASE_IMAGE=${{ env.GRPC_BUILDER }}
             BUILDER_TARGET=builder-prebuilt
           tags: |
-            ${{ env.BACKEND_REPOSITORY }}:v4.12.1-llama-72500667f
+            ${{ env.BACKEND_REPOSITORY }}:v4.12.1-llama-df43671c1
             ${{ env.BACKEND_REPOSITORY }}:v4.12.1-llama-latest
 
       - name: Resolve immutable backend digest
@@ -126,7 +126,7 @@ jobs:
             LOCALAI_COMMIT=${{ env.LOCALAI_COMMIT }}
             LLAMA_COMMIT=${{ env.LLAMA_COMMIT }}
           tags: |
-            ${{ env.RUNTIME_REPOSITORY }}:v4.12.1-llama-72500667f
+            ${{ env.RUNTIME_REPOSITORY }}:v4.12.1-llama-df43671c1
             ${{ env.RUNTIME_REPOSITORY }}:v4.12.1-llama-latest
 
       - name: Verify published runtime
@@ -150,7 +150,7 @@ jobs:
       - name: Retain build evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: localai-v4.12.1-llama-72500667f-evidence
+          name: localai-v4.12.1-llama-df43671c1-evidence
           path: evidence
           if-no-files-found: error
           retention-days: 90
