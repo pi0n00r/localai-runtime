@@ -9,11 +9,11 @@
   "llama_cpp": {
     "requested_ref": "master",
     "repository": "https://github.com/pi0n00r/llama.cpp.git",
-    "commit": "df43671c1f341deb88306bb1e8c857151b123f84"
+    "commit": "1e44405182af8f404b7454497160a0539653c68c"
   },
   "localai_source_patch": {
     "path": "localai-v4.12.1-llama.patch",
-    "sha256": "be862d918dc34f92d88577ec8d9364061a5c176d16be96a2fcc22d1082ba4e05",
+    "sha256": "c4cc632613433da05c4a4df67ed678304e65855c2daee3ff5666e8d398d2e4ec",
     "purpose": "Pin the maintained llama.cpp source, adapt text-only rerank, and include split realtime definitions in the gRPC target"
   },
   "compatibility_patch": {
