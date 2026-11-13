@@ -8,6 +8,12 @@ LocalAI source, upstream runtime image, llama.cpp source, ROCm base, gRPC builde
 platform, and GPU target used by the build. The floating source branch is never
 consulted during the build.
 
+LocalAI v4.12.1 carries a score-task patch for its llama.cpp backend. Current
+llama.cpp changed the checkpoint container and renamed the logits predicate, so
+this recipe installs the source-equivalent rebased patch recorded in
+`SOURCE.lock`. The patch is hash-checked before the backend build; it is not a
+runtime modification.
+
 Published tags:
 
 - `ghcr.io/pi0n00r/localai:v4.12.1-llama-72500667f`

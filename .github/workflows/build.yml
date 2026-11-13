@@ -50,6 +50,12 @@ jobs:
             "$RUNNER_TEMP/LocalAI/backend/cpp/llama-cpp/Makefile"
           grep -F 'LLAMA_REPO?=https://github.com/pi0n00r/llama.cpp.git' \
             "$RUNNER_TEMP/LocalAI/backend/cpp/llama-cpp/Makefile"
+          install -m 0644 \
+            "$GITHUB_WORKSPACE/v4.12.1-llama-latest/0001-add-server-task-type-score-rebased.patch" \
+            "$RUNNER_TEMP/LocalAI/backend/cpp/llama-cpp/patches/0001-add-server-task-type-score.patch"
+          test "$(sha256sum "$RUNNER_TEMP/LocalAI/backend/cpp/llama-cpp/patches/0001-add-server-task-type-score.patch" | cut -d " " -f 1)" = \
+            "bb7300dc120bb1eca28286e9c662f0b45993c9d51fd3a6d5234ebe3689525a3c"
+          git -C "$RUNNER_TEMP/LocalAI" diff --check -- backend/cpp/llama-cpp/Makefile
 
       - name: Set up Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435

@@ -11,6 +11,11 @@
     "repository": "https://github.com/pi0n00r/llama.cpp.git",
     "commit": "72500667f88c6b7ed2e6ebbc308d8759a0a5afea"
   },
+  "compatibility_patch": {
+    "path": "0001-add-server-task-type-score-rebased.patch",
+    "sha256": "bb7300dc120bb1eca28286e9c662f0b45993c9d51fd3a6d5234ebe3689525a3c",
+    "purpose": "Rebase LocalAI v4.12.1 score-task support onto the pinned llama.cpp commit"
+  },
   "target": {
     "platform": "linux/amd64",
     "build_type": "hipblas",
