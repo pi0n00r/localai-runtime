@@ -2,6 +2,11 @@ name: LocalAI v4.12.1 with maintained llama.cpp
 
 on:
   workflow_dispatch:
+    inputs:
+      backend_digest:
+        description: Existing verified backend digest to reuse instead of rebuilding
+        required: false
+        type: string
   push:
     branches:
       - master
@@ -74,6 +79,7 @@ jobs:
 
       - name: Build and publish pinned llama.cpp backend
         id: backend
+        if: inputs.backend_digest == ''
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83
         with:
           context: ${{ runner.temp }}/LocalAI
@@ -92,6 +98,18 @@ jobs:
             ${{ env.BACKEND_REPOSITORY }}:v4.12.1-llama-72500667f
             ${{ env.BACKEND_REPOSITORY }}:v4.12.1-llama-latest
 
+      - name: Resolve immutable backend digest
+        id: backend_ref
+        shell: bash
+        env:
+          REQUESTED_BACKEND_DIGEST: ${{ inputs.backend_digest }}
+          BUILT_BACKEND_DIGEST: ${{ steps.backend.outputs.digest }}
+        run: |
+          set -euo pipefail
+          digest="${REQUESTED_BACKEND_DIGEST:-${BUILT_BACKEND_DIGEST:-}}"
+          [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]
+          echo "digest=$digest" >> "$GITHUB_OUTPUT"
+
       - name: Build and publish reproducible LocalAI runtime
         id: runtime
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83
@@ -103,7 +121,7 @@ jobs:
           provenance: mode=max
           sbom: true
           build-args: |
-            BACKEND_IMAGE=${{ env.BACKEND_REPOSITORY }}@${{ steps.backend.outputs.digest }}
+            BACKEND_IMAGE=${{ env.BACKEND_REPOSITORY }}@${{ steps.backend_ref.outputs.digest }}
             LOCALAI_IMAGE=${{ env.LOCALAI_RUNTIME }}
             LOCALAI_COMMIT=${{ env.LOCALAI_COMMIT }}
             LLAMA_COMMIT=${{ env.LLAMA_COMMIT }}
@@ -124,7 +142,7 @@ jobs:
           docker run --rm --entrypoint /local-ai "$image" --version
           mkdir -p evidence
           cp v4.12.1-llama-latest/SOURCE.lock evidence/SOURCE.lock
-          printf '%s  %s\n' '${{ steps.backend.outputs.digest }}' localai-llama-backend > evidence/IMAGE-DIGESTS
+          printf '%s  %s\n' '${{ steps.backend_ref.outputs.digest }}' localai-llama-backend > evidence/IMAGE-DIGESTS
           printf '%s  %s\n' '${{ steps.runtime.outputs.digest }}' localai-runtime >> evidence/IMAGE-DIGESTS
           docker buildx imagetools inspect --raw "$image" > evidence/runtime-manifest.json
           sha256sum evidence/* > evidence/SHA256SUMS
