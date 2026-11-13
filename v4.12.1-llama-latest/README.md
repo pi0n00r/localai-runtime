@@ -31,7 +31,7 @@ upstream chat, schema, stream, and decision modules.
 
 Published tags:
 
-- `ghcr.io/pi0n00r/localai:v4.12.1-llama-72500667f`
+- `ghcr.io/pi0n00r/localai:v4.12.1-llama-df43671c1`
 - `ghcr.io/pi0n00r/localai:v4.12.1-llama-latest`
 
 The second tag is a convenience alias for the same immutable image digest. It

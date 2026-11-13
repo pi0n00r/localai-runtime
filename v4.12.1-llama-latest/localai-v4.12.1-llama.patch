@@ -6,7 +6,7 @@ index 3bce117..58ec5c7 100644
  
 -LLAMA_VERSION?=c0fd78626405c6d9b934efef0ec7291fcc20e3d6
 -LLAMA_REPO?=https://github.com/ggerganov/llama.cpp
-+LLAMA_VERSION?=72500667f88c6b7ed2e6ebbc308d8759a0a5afea
++LLAMA_VERSION?=df43671c1f341deb88306bb1e8c857151b123f84
 +LLAMA_REPO?=https://github.com/pi0n00r/llama.cpp.git
  
  CMAKE_ARGS?=
