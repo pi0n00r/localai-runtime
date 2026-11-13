@@ -55,6 +55,9 @@ jobs:
             "$RUNNER_TEMP/LocalAI/backend/cpp/llama-cpp/patches/0001-add-server-task-type-score.patch"
           test "$(sha256sum "$RUNNER_TEMP/LocalAI/backend/cpp/llama-cpp/patches/0001-add-server-task-type-score.patch" | cut -d " " -f 1)" = \
             "bb7300dc120bb1eca28286e9c662f0b45993c9d51fd3a6d5234ebe3689525a3c"
+          test "$(sha256sum "$RUNNER_TEMP/LocalAI/backend/cpp/llama-cpp/patches/0002-add-server-task-type-tts.patch" | cut -d " " -f 1)" = \
+            "e3ccc3ebb172411553b943b7ea5ce6079845f2bc2cce62c17b767cffdbad0d57"
+          rm "$RUNNER_TEMP/LocalAI/backend/cpp/llama-cpp/patches/0002-add-server-task-type-tts.patch"
           git -C "$RUNNER_TEMP/LocalAI" diff --check -- backend/cpp/llama-cpp/Makefile
 
       - name: Set up Buildx

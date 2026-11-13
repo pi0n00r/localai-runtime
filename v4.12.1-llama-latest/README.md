@@ -14,6 +14,12 @@ this recipe installs the source-equivalent rebased patch recorded in
 `SOURCE.lock`. The patch is hash-checked before the backend build; it is not a
 runtime modification.
 
+The old LocalAI TTS patch is also hash-checked and then removed. Its feature set
+is native in the pinned llama.cpp ancestry through commit `5c0b49a23`; applying
+the pre-upstream patch again would reverse or duplicate that implementation.
+The backend compile remains the joined compatibility gate for LocalAI's gRPC
+wrapper and these native llama.cpp APIs.
+
 Published tags:
 
 - `ghcr.io/pi0n00r/localai:v4.12.1-llama-72500667f`

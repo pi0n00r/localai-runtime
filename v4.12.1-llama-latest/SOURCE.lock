@@ -16,6 +16,12 @@
     "sha256": "bb7300dc120bb1eca28286e9c662f0b45993c9d51fd3a6d5234ebe3689525a3c",
     "purpose": "Rebase LocalAI v4.12.1 score-task support onto the pinned llama.cpp commit"
   },
+  "native_tts_replacement": {
+    "retired_localai_patch": "0002-add-server-task-type-tts.patch",
+    "retired_patch_sha256": "e3ccc3ebb172411553b943b7ea5ce6079845f2bc2cce62c17b767cffdbad0d57",
+    "llama_cpp_commit": "5c0b49a23",
+    "reason": "The pinned llama.cpp ancestry contains the native TTS implementation"
+  },
   "target": {
     "platform": "linux/amd64",
     "build_type": "hipblas",
