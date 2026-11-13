@@ -1,7 +1,8 @@
 diff --git a/backend/cpp/llama-cpp/Makefile b/backend/cpp/llama-cpp/Makefile
+index 3bce117..58ec5c7 100644
 --- a/backend/cpp/llama-cpp/Makefile
 +++ b/backend/cpp/llama-cpp/Makefile
-@@ -1,5 +1,5 @@
+@@ -1,6 +1,6 @@
  
 -LLAMA_VERSION?=c0fd78626405c6d9b934efef0ec7291fcc20e3d6
 -LLAMA_REPO?=https://github.com/ggerganov/llama.cpp
@@ -9,3 +10,17 @@ diff --git a/backend/cpp/llama-cpp/Makefile b/backend/cpp/llama-cpp/Makefile
 +LLAMA_REPO?=https://github.com/pi0n00r/llama.cpp.git
  
  CMAKE_ARGS?=
+ BUILD_TYPE?=
+diff --git a/backend/cpp/llama-cpp/grpc-server.cpp b/backend/cpp/llama-cpp/grpc-server.cpp
+index 21e556b..f0b77bb 100644
+--- a/backend/cpp/llama-cpp/grpc-server.cpp
++++ b/backend/cpp/llama-cpp/grpc-server.cpp
+@@ -3114,7 +3114,7 @@ public:
+ 
+             tasks.reserve(documents.size());
+             for (size_t i = 0; i < documents.size(); i++) {
+-                auto tmp = format_prompt_rerank(ctx_server.impl->model_tgt, ctx_server.impl->vocab, ctx_server.impl->mctx, request->query(), documents[i] LOCALAI_MTMD_INIT_OPT_ARG(ctx_server.impl->init_opt));
++                auto tmp = format_prompt_rerank(ctx_server.impl->model_tgt, ctx_server.impl->vocab, ctx_server.impl->mctx, request->query(), documents[i], {}, {} LOCALAI_MTMD_INIT_OPT_ARG(ctx_server.impl->init_opt));
+                 server_task task = server_task(SERVER_TASK_TYPE_RERANK);
+                 task.id = rd.queue_tasks.get_new_id();
+                 task.index = i;

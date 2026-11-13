@@ -30,7 +30,7 @@ index 6043ab342..3b21b5840 100644
      int32_t n_outputs_max         =     0; // max outputs in a batch (0 = n_batch)
      int32_t n_outputs_max_per_seq =     1; // max outputs per sequence
 diff --git a/tools/server/server-context.cpp b/tools/server/server-context.cpp
-index fe9ff069f..31b7e1b23 100644
+index fe9ff069f..448bf4752 100644
 --- a/tools/server/server-context.cpp
 +++ b/tools/server/server-context.cpp
 @@ -62,6 +62,13 @@ static common_speculative_output_limits server_output_limits(const common_params
@@ -408,7 +408,7 @@ index fe9ff069f..31b7e1b23 100644
 +                              slot.prompt.n_tokens() <  slot.task->n_score_prompt - 1))) {
 +                            bool have_ckpt = false;
 +                            for (const auto & ckpt : slot.prompt.checkpoints) {
-+                                have_ckpt |= ckpt.n_tokens == slot.prompt.n_tokens();
++                                have_ckpt |= ckpt->n_tokens == slot.prompt.n_tokens();
 +                            }
 +                            if (!have_ckpt) {
 +                                break;

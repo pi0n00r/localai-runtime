@@ -20,6 +20,11 @@ the pre-upstream patch again would reverse or duplicate that implementation.
 The backend compile remains the joined compatibility gate for LocalAI's gRPC
 wrapper and these native llama.cpp APIs.
 
+The source patch also adapts LocalAI's text-only rerank call to llama.cpp's
+current multimodal signature by passing explicit empty query/document media
+collections. It does not add media to the gRPC contract or change rerank request
+semantics.
+
 Published tags:
 
 - `ghcr.io/pi0n00r/localai:v4.12.1-llama-72500667f`

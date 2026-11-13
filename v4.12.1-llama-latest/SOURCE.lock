@@ -11,9 +11,14 @@
     "repository": "https://github.com/pi0n00r/llama.cpp.git",
     "commit": "72500667f88c6b7ed2e6ebbc308d8759a0a5afea"
   },
+  "localai_source_patch": {
+    "path": "localai-v4.12.1-llama.patch",
+    "sha256": "6c15cf0ba16a13320ab5943a2fd7bfa7880646cdaf0793459a8f37345045c763",
+    "purpose": "Pin the maintained llama.cpp source and adapt the text-only rerank call to the current signature"
+  },
   "compatibility_patch": {
     "path": "0001-add-server-task-type-score-rebased.patch",
-    "sha256": "bb7300dc120bb1eca28286e9c662f0b45993c9d51fd3a6d5234ebe3689525a3c",
+    "sha256": "d7d47b49e0b68cc2b8a47759ab1a182a7727eb776f77d995546bb6bd1d5a5d77",
     "purpose": "Rebase LocalAI v4.12.1 score-task support onto the pinned llama.cpp commit"
   },
   "native_tts_replacement": {
