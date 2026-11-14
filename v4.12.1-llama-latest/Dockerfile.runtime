@@ -5,13 +5,16 @@ FROM ${BACKEND_IMAGE} AS llama_backend
 FROM ${LOCALAI_IMAGE}
 
 ARG LOCALAI_COMMIT
+ARG LOCALAI_SCHEMA_FIX_COMMIT
 ARG LLAMA_COMMIT
 
 COPY --from=llama_backend / /var/lib/local-ai/backends/llama-cpp/
+COPY --chmod=0755 local-ai /local-ai
 
 LABEL org.opencontainers.image.title="LocalAI v4.12.1 with pi0n00r llama.cpp" \
       org.opencontainers.image.source="https://github.com/pi0n00r/llama.cpp" \
       org.opencontainers.image.version="v4.12.1-llama-${LLAMA_COMMIT}" \
       com.bajaj.localai.commit="${LOCALAI_COMMIT}" \
+      com.bajaj.localai.schema-fix-commit="${LOCALAI_SCHEMA_FIX_COMMIT}" \
       com.bajaj.llama-cpp.commit="${LLAMA_COMMIT}" \
       com.bajaj.localai.backend="llama-cpp/hipblas/gfx1151"

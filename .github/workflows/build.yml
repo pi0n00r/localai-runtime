@@ -30,6 +30,7 @@ jobs:
     timeout-minutes: 180
     env:
       LOCALAI_COMMIT: ec9274027eadd552d56f2c6c1fe86cd9216a991a
+      LOCALAI_SCHEMA_FIX_COMMIT: 035f7acadf4d98ee78d04c6e01a88fb2c98c0cb9
       LLAMA_COMMIT: 1e44405182af8f404b7454497160a0539653c68c
       BACKEND_REPOSITORY: ghcr.io/pi0n00r/localai-llama-backend
       RUNTIME_REPOSITORY: ghcr.io/pi0n00r/localai
@@ -53,6 +54,10 @@ jobs:
             "c4cc632613433da05c4a4df67ed678304e65855c2daee3ff5666e8d398d2e4ec"
           git -C "$RUNNER_TEMP/LocalAI" apply \
             "$GITHUB_WORKSPACE/v4.12.1-llama-latest/localai-v4.12.1-llama.patch"
+          test "$(sha256sum "$GITHUB_WORKSPACE/v4.12.1-llama-latest/localai-json-schema-bounds.patch" | cut -d " " -f 1)" = \
+            "0c386dd09cd31c31a47ccd3e4869ffbfa8e9178640fd022effbe2af18f00f290"
+          git -C "$RUNNER_TEMP/LocalAI" apply \
+            "$GITHUB_WORKSPACE/v4.12.1-llama-latest/localai-json-schema-bounds.patch"
           grep -F "LLAMA_VERSION?=$LLAMA_COMMIT" \
             "$RUNNER_TEMP/LocalAI/backend/cpp/llama-cpp/Makefile"
           grep -F 'LLAMA_REPO?=https://github.com/pi0n00r/llama.cpp.git' \
@@ -66,6 +71,28 @@ jobs:
             "e3ccc3ebb172411553b943b7ea5ce6079845f2bc2cce62c17b767cffdbad0d57"
           rm "$RUNNER_TEMP/LocalAI/backend/cpp/llama-cpp/patches/0002-add-server-task-type-tts.patch"
           git -C "$RUNNER_TEMP/LocalAI" diff --check -- backend/cpp/llama-cpp/Makefile
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.x'
+          cache: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Build patched LocalAI server
+        shell: bash
+        run: |
+          set -euo pipefail
+          make -C "$RUNNER_TEMP/LocalAI" build \
+            VERSION="v4.12.1-schema-${LOCALAI_SCHEMA_FIX_COMMIT:0:9}"
+          install -m 0755 "$RUNNER_TEMP/LocalAI/local-ai" \
+            "$GITHUB_WORKSPACE/v4.12.1-llama-latest/local-ai"
+          sha256sum "$GITHUB_WORKSPACE/v4.12.1-llama-latest/local-ai" \
+            > "$GITHUB_WORKSPACE/v4.12.1-llama-latest/local-ai.sha256"
 
       - name: Set up Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435
@@ -124,6 +151,7 @@ jobs:
             BACKEND_IMAGE=${{ env.BACKEND_REPOSITORY }}@${{ steps.backend_ref.outputs.digest }}
             LOCALAI_IMAGE=${{ env.LOCALAI_RUNTIME }}
             LOCALAI_COMMIT=${{ env.LOCALAI_COMMIT }}
+            LOCALAI_SCHEMA_FIX_COMMIT=${{ env.LOCALAI_SCHEMA_FIX_COMMIT }}
             LLAMA_COMMIT=${{ env.LLAMA_COMMIT }}
           tags: |
             ${{ env.RUNTIME_REPOSITORY }}:v4.12.1-llama-1e4440518
@@ -136,12 +164,14 @@ jobs:
           image="${RUNTIME_REPOSITORY}@${{ steps.runtime.outputs.digest }}"
           docker pull "$image"
           test "$(docker inspect --format '{{ index .Config.Labels "com.bajaj.localai.commit" }}' "$image")" = "$LOCALAI_COMMIT"
+          test "$(docker inspect --format '{{ index .Config.Labels "com.bajaj.localai.schema-fix-commit" }}' "$image")" = "$LOCALAI_SCHEMA_FIX_COMMIT"
           test "$(docker inspect --format '{{ index .Config.Labels "com.bajaj.llama-cpp.commit" }}' "$image")" = "$LLAMA_COMMIT"
           docker run --rm --entrypoint /bin/sh "$image" -ec \
             'test -x /var/lib/local-ai/backends/llama-cpp/run.sh; test -x /local-ai'
           docker run --rm --entrypoint /local-ai "$image" --version
           mkdir -p evidence
           cp v4.12.1-llama-latest/SOURCE.lock evidence/SOURCE.lock
+          cp v4.12.1-llama-latest/local-ai.sha256 evidence/local-ai.sha256
           printf '%s  %s\n' '${{ steps.backend_ref.outputs.digest }}' localai-llama-backend > evidence/IMAGE-DIGESTS
           printf '%s  %s\n' '${{ steps.runtime.outputs.digest }}' localai-runtime >> evidence/IMAGE-DIGESTS
           docker buildx imagetools inspect --raw "$image" > evidence/runtime-manifest.json

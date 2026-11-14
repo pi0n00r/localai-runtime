@@ -29,6 +29,12 @@ It also includes llama.cpp's split realtime implementation in LocalAI's guarded
 single-translation-unit gRPC build, matching the existing handling for the
 upstream chat, schema, stream, and decision modules.
 
+The runtime replaces the upstream v4.12.1 server executable with a source-built
+v4.12.1 binary carrying the reviewed JSON Schema bounds fix from
+`pi0n00r/LocalAI`. This preserves `minLength`, `maxLength`, `minItems`, and
+`maxItems` when LocalAI converts strict response schemas to GBNF. The exact
+commit, patch hash, and upstream pull request are recorded in `SOURCE.lock`.
+
 Published tags:
 
 - `ghcr.io/pi0n00r/localai:v4.12.1-llama-1e4440518`

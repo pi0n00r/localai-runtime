@@ -16,6 +16,14 @@
     "sha256": "c4cc632613433da05c4a4df67ed678304e65855c2daee3ff5666e8d398d2e4ec",
     "purpose": "Pin the maintained llama.cpp source, adapt text-only rerank, and include split realtime definitions in the gRPC target"
   },
+  "localai_schema_bounds_fix": {
+    "repository": "https://github.com/pi0n00r/LocalAI.git",
+    "commit": "035f7acadf4d98ee78d04c6e01a88fb2c98c0cb9",
+    "upstream_pr": "https://github.com/mudler/LocalAI/pull/13222",
+    "path": "localai-json-schema-bounds.patch",
+    "sha256": "0c386dd09cd31c31a47ccd3e4869ffbfa8e9178640fd022effbe2af18f00f290",
+    "purpose": "Preserve JSON Schema string and array bounds in generated GBNF"
+  },
   "compatibility_patch": {
     "path": "0001-add-server-task-type-score-rebased.patch",
     "sha256": "d7d47b49e0b68cc2b8a47759ab1a182a7727eb776f77d995546bb6bd1d5a5d77",
